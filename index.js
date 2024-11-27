@@ -30,28 +30,7 @@ function showTable() {
     .filter(item => !filterName || item.status === filterName)
     .forEach(item => {
       const row = document.createElement("tr");
-
-      row.innerHTML = `
-        <td>${item.id}</td>
-        <td>${item.name}</td>
-        <td class="${getStatusClass(item.status)}">${item.status}</td>
-        <td>${item.origin}</td>
-        <td>${item.destination}</td>
-        <td>${item.departureDate}</td>
-        <td>
-          <select class="form-select status-select">
-            <option ${
-              item.status === "Ожидает отправки" ? "selected" : ""
-            }>Ожидает отправки</option>
-            <option ${
-              item.status === "В пути" ? "selected" : ""
-            }>В пути</option>
-            <option ${
-              item.status === "Доставлен" ? "selected" : ""
-            }>Доставлен</option>
-          </select>
-        </td>
-      `;
+      row.innerHTML = createRow(item);
 
       const select = row.querySelector(".status-select");
       select.addEventListener("change", e => {
@@ -74,13 +53,6 @@ function showTable() {
 
       table.appendChild(row);
     });
-}
-
-function getStatusClass(status) {
-  if (status === "Ожидает отправки") return "waiting";
-  if (status === "В пути") return "transit";
-  if (status === "Доставлен") return "delivered";
-  return "";
 }
 
 addForm.addEventListener("submit", e => {
@@ -110,6 +82,37 @@ addForm.addEventListener("submit", e => {
   addForm.reset();
   showTable();
 });
+
+function getStatusClass(status) {
+  if (status === "Ожидает отправки") return "waiting";
+  if (status === "В пути") return "transit";
+  if (status === "Доставлен") return "delivered";
+  return "";
+}
+
+function createRow(item) {
+  return `
+        <td>${item.id}</td>
+        <td>${item.name}</td>
+        <td class="${getStatusClass(item.status)}">${item.status}</td>
+        <td>${item.origin}</td>
+        <td>${item.destination}</td>
+        <td>${item.departureDate}</td>
+        <td>
+          <select class="form-select status-select">
+            <option ${
+              item.status === "Ожидает отправки" ? "selected" : ""
+            }>Ожидает отправки</option>
+            <option ${
+              item.status === "В пути" ? "selected" : ""
+            }>В пути</option>
+            <option ${
+              item.status === "Доставлен" ? "selected" : ""
+            }>Доставлен</option>
+          </select>
+        </td>
+      `;
+}
 
 filter.addEventListener("change", showTable);
 
